@@ -7,14 +7,10 @@ FZFZ_RECENT_DIRS_TOOL=${FZFZ_RECENT_DIRS_TOOL:="z"}
 
 SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-if [[ $FZFZ_RECENT_DIRS_TOOL == "z" ]]; then
-    if [ ! -f "$SCRIPT_PATH/z.sh" ]; then
-        >&2 echo "Locally-cached copy of z.sh not found, downloading..."
-        curl https://raw.githubusercontent.com/rupa/z/master/z.sh > "$SCRIPT_PATH/z.sh"
-    fi
+if [[ $FZFZ_RECENT_DIRS_TOOL == "_zlua" ]]; then
+    eval "$(lua /home/rtx/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-skywind3000-SLASH-z.lua/z.lua --init bash)"
 
-    source "$SCRIPT_PATH/z.sh"
-    _z -l 2>&1 && exit 0 || exit 0
+    _zlua -l 2>&1 && exit 0 || exit 0
 elif [[ $FZFZ_RECENT_DIRS_TOOL == "autojump" ]]; then
     autojump -s | tac | tail +8 | tac | awk '{print $2}'
 elif [[ $FZFZ_RECENT_DIRS_TOOL == "fasd" ]]; then
